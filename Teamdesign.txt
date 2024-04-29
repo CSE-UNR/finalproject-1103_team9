@@ -1,4 +1,4 @@
-main()
+main() -- both, 5/6
 do-while loop with switches for each function call, 0 to exit program
 
 displayMenu()
@@ -11,23 +11,23 @@ displayMenu()
 6 - brighten
 (7 - rotate)
 
-loadImage()
+loadImage() -- both, 5/1
 nested for-loops, fscanf until endline character into an array. at the end, add a S
 
-convertPixel()
+convertPixel() -- Eden, 5/1
 Convert numbers into pixels
 
-displayImage()
+displayImage() -- both, 5/1
 convertPixel(), printf. when it contains an S, stop displaying
 
-cropImage()
+cropImage() Both, 5/4
 Display image with added numbers on the edges? Have user input the numbers for the corners, save as variables. Subtract corners from each other (row from row, column from column) to get the new array size. Create copy in new array.
 
-dimPic()
+dimPic() -- Omar, 5/4
 Nested for-loops, subtract 1 from everything except for 0s. Switch statement, if 0 do nothing, default subtract 1
 
-brightenPic()
+brightenPic() -- Omar, 5/4
 The same, but adds 1 except for the 4s.
 
-saveImage()
+saveImage() -- Eden, 5/4
 Prompt user for file name, file pointer in write, fprintf. each time the row changes, add \n
