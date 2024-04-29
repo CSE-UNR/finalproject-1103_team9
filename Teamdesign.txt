@@ -1,1 +1,33 @@
-hello world!
+main()
+do-while loop with switches for each function call, 0 to exit program
+
+displayMenu()
+1 - load image
+2 - display
+3 - edit
+	if 3
+4 - crop
+5 - dim
+6 - brighten
+(7 - rotate)
+
+loadImage()
+nested for-loops, fscanf until endline character into an array. at the end, add a S
+
+convertPixel()
+Convert numbers into pixels
+
+displayImage()
+convertPixel(), printf. when it contains an S, stop displaying
+
+cropImage()
+Display image with added numbers on the edges? Have user input the numbers for the corners, save as variables. Subtract corners from each other (row from row, column from column) to get the new array size. Create copy in new array.
+
+dimPic()
+Nested for-loops, subtract 1 from everything except for 0s. Switch statement, if 0 do nothing, default subtract 1
+
+brightenPic()
+The same, but adds 1 except for the 4s.
+
+saveImage()
+Prompt user for file name, file pointer in write, fprintf. each time the row changes, add \n
