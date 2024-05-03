@@ -8,25 +8,23 @@
 
 int displayMenu(); // done
 int displayEdits(); // done
-void loadImage(char fileName[], FILE* ptr);
+int loadImage(int size, char fileName[], int temp[][size]);
 void convertPixel();
 void displayImage();
 void cropImage();
 void dimPic();
 void brightenPic();
 void saveImage();
-void saveImage();
+
 
 int main(){
 	int userin;
 	int useredit;
-	// to make sure they loaded an image first befo anything
-	int isloaded = 0;
+	int isloaded;
 	
-	int userImage[IMAGESIZE];
+	int userImage[IMAGESIZE][IMAGESIZE];
 	char imageName[50];
 	
-	FILE *userfileptr;
 	do{
 		userin = displayMenu();
 		switch(userin){
@@ -34,11 +32,7 @@ int main(){
 			return 0;
 		break;
 		case 1:
-			// Load image call goes here
-			loadImage(imageName,userfileptr);
-			//printf("image loader is boken T^T, just pretend i did for now \n\n");
-			isloaded = 1;
-			fclose(userfileptr);
+			isloaded = loadImage(IMAGESIZE, imageName, userImage);
 		break;
 		case 2:
 			if(isloaded == 1){
@@ -100,19 +94,32 @@ int displayEdits(){
 	return input;
 }
 
-void loadImage(char fileName[], FILE* ptr){
+int loadImage(int size, char fileName[], int image[][size]){
 	char Name[50];
+	char temp[size][size];
+	int rowInd, colInd;
+	FILE* ptr;
 	
-	printf("give me the name of the file with .txt to load:\n");
-	//fgets(Name,50,stdin);
-
+	printf("Enter the file name [.txt format, no spaces]:\n");
 	scanf("%s", Name);
 
 	
 	ptr = fopen(Name,"r");
 	if(ptr == NULL){
 		printf("Cant open file");
+		return 0;
 	}
+	for(rowInd = 0; rowInd < size; rowInd++){
+		for(colInd = 0; temp[rowInd][colInd] != '\n'; colInd++){
+			while(fscanf(ptr, "%c", &temp[rowInd][colInd]) == 1){}
+		}
+	}
+	printf("%c\n", temp[5][5]);
+	
+	fclose(ptr);
+	int check = 1;
+	
+	return check;
 	
 	
 }
