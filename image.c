@@ -12,7 +12,7 @@ int loadImage(int size, int image[][size], int* xrow, int* ycol); //done
 char convertPixel(int pixel); //done
 void displayImage(int size, int image[][size], int* xrow, int* ycol); //done
 void cropImage();
-void dimBrightenPic(int choice, int xrow, int ycol, int image[][ycol]); //started
+void dimBrightenPic(int choice, int size, int *xrow, int *ycol, int image[][size]); //started
 int saveImage(int size, int *xrow, int *ycol, int image[][size]); //started
 
 
@@ -52,11 +52,11 @@ int main(){
 					printf("image crop is boken T^T \n\n");
 				break;
 				case 2:
-					dimBrightenPic(useredit, xrow, ycol, userImage);
-					//printf("image dim is boken T^T \n\n");
+					dimBrightenPic(useredit, IMAGESIZE, &xrow, &ycol, userImage);
+					//printf("image dim is ben T^T \n\n");
 				break;
 				case 3:
-					dimBrightenPic(useredit, xrow, ycol, userImage);
+					dimBrightenPic(useredit, IMAGESIZE, &xrow, &ycol, userImage);
 					printf("image brighten is boken T^T \n\n");
 				case 0:
 					printf("\n\n");
@@ -188,22 +188,26 @@ char convertPixel(int pixel){
 		}
 }
 
-void dimBrightenPic(int choice, int xrow, int ycol, int image[][ycol]){
+void dimBrightenPic(int choice, int size, int *xrow, int *ycol, int image[][size]){
 	int rowInd, colInd;
-	int edit[xrow][ycol];
+	int edit[size][size];
+	displayImage(IMAGESIZE, image, xrow, ycol);
 	if(choice == 2){
-		for(rowInd = 0; rowInd < xrow; rowInd++){
-			for(colInd = 0; colInd < ycol; colInd++){
+		for(rowInd = 0; rowInd < *xrow; rowInd++){
+			colInd = 0;
+			for(colInd = 0; colInd < *ycol; colInd++){
 				if(image[rowInd][colInd] != 0){
-					edit[rowInd][colInd] = image[rowInd][colInd] - 1;
+					edit[rowInd][colInd] = image[rowInd][colInd] -1 ;
 				}
 			}
-			colInd = 0;
+			
+			printf("%d ", edit[rowInd][colInd]);
+			printf("\n");
 		}
 	}
 	else if(choice == 3){
-		for(rowInd = 0; rowInd < xrow; rowInd++){
-			for(colInd = 0; colInd < ycol; colInd++){
+		for(rowInd = 0; rowInd < *xrow; rowInd++){
+			for(colInd = 0; colInd < *ycol; colInd++){
 				if(image[rowInd][colInd] != 4){
 					edit[rowInd][colInd] = image[rowInd][colInd] + 1;
 				}
@@ -211,8 +215,8 @@ void dimBrightenPic(int choice, int xrow, int ycol, int image[][ycol]){
 			colInd = 0;
 		}
 	}
-	displayImage(IMAGESIZE, edit, &xrow, &ycol);
-	saveImage(IMAGESIZE, &xrow, &ycol, edit);
+	displayImage(IMAGESIZE, edit, xrow, ycol);
+	saveImage(IMAGESIZE, xrow, ycol, edit);
 }
 
 int saveImage(int size, int *xrow, int *ycol, int image[][size]){
