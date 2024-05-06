@@ -1,6 +1,6 @@
 // Omar Rojas And Eden
 // CS 135
-// Team Project 9
+// Team Project 11
 
 #include <stdio.h>
 #define IMAGESIZE 500
@@ -11,9 +11,10 @@ int displayEdits(); // done
 int loadImage(int size, int image[][size], int* xrow, int* ycol); //done
 char convertPixel(int pixel); //done
 void displayImage(int size, int image[][size], int* xrow, int* ycol); //done
-void cropImage();
-void dimBrightenPic(int choice, int size, int *xrow, int *ycol, int image[][size]); //started
-int saveImage(int size, int *xrow, int *ycol, int image[][size]); //started
+void cropImage(int size, int image[][size], int* xrow, int* ycol); //done
+void dimBrightenPic(int choice, int size, int* xrow, int* ycol, int image[][size]); //done
+void rotateImage(int size, int image[][size], int* xrow, int* ycol);
+int saveImage(int size, int* xrow, int* ycol, int image[][size]); //done
 
 
 int main(){
@@ -21,22 +22,19 @@ int main(){
 	int useredit;
 	int isloaded;
 	int xrow, ycol;
-	
 	int userImage[IMAGESIZE][IMAGESIZE];
-	/* char imageName[50]; */
 	
 	do{
 		userin = displayMenu();
 		switch(userin){
 		case 0:
-			return 0;
+			printf("Goodbye!\n");
 		break;
 		case 1:
 			isloaded = loadImage(IMAGESIZE, userImage, &xrow, &ycol);
 		break;
 		case 2:
 			if(isloaded == 1){
-			// display image call goes here
 			displayImage(IMAGESIZE, userImage, &xrow, &ycol);
 			}
 			else{
@@ -48,16 +46,17 @@ int main(){
 			useredit = displayEdits();
 				switch(useredit){
 				case 1:
-					// Crop call goes here
-					printf("image crop is boken T^T \n\n");
+					cropImage(IMAGESIZE, userImage, &xrow, &ycol);
 				break;
 				case 2:
 					dimBrightenPic(useredit, IMAGESIZE, &xrow, &ycol, userImage);
-					//printf("image dim is ben T^T \n\n");
 				break;
 				case 3:
 					dimBrightenPic(useredit, IMAGESIZE, &xrow, &ycol, userImage);
-					printf("image brighten is boken T^T \n\n");
+				break;
+				case 4:
+					rotateImage(IMAGESIZE, userImage, &xrow, &ycol);
+				break;
 				case 0:
 					printf("\n\n");
 				break;
@@ -90,7 +89,7 @@ int displayMenu(){
 int displayEdits(){
 	int input;
 	printf("\n\n---EDITING---\n");
-	printf("1: Crop image\n2: Dim image\n3: Brighten image\n0: Return to main menu\n\n");
+	printf("1: Crop image\n2: Dim image\n3: Brighten image\n4: Rotate image\n0: Return to main menu\n\n");
 	printf("Choose from one of the options above: ");
 	scanf("%d", &input);
 	return input;
@@ -127,37 +126,19 @@ int loadImage(int size, int image[][size], int* xrow, int* ycol){
 
 	*xrow = rowInd;
 	*ycol = colInd;
-// test print of char
-	/* for(int i = 0; i <= rowInd; i++){
-		for(int j = 0; j <= colInd; j++){
-			printf("%c", temp[i][j]);
-		}
-	} */
-// converting char to int	
+	
 	for (int i = 0; i < rowInd; i++) {
 	        for (int j = 0; j < colInd; j++) {
 	            image[i][j] = temp[i][j] - '0';
 	        }
 	}
-	    
-// test print of int array
-	/* for(int i = 0; i < rowInd; i++){
-		printf("\n");
-		for(int j = 0; j < colInd; j++){
-			printf("%d", image[i][j]);
-		}
-	} */
- 	
 	
-	printf("\n\nImage successfully loaded\n\n");
+	printf("\n---Image Loaded Successfully---\n\n");
 	int check = 1;
 	
 	return check;
 }
 void displayImage(int size, int image[][size], int* xrow, int* ycol){
-	// to see the size passes
-	printf("\ncolumns: %d \nrows: %d \n", *ycol, *xrow);
-	//to print
 	for(int i = 0; i < *xrow; i++){
 		printf("\n");
 		for(int j = 0; j < *ycol; j++){
@@ -188,21 +169,64 @@ char convertPixel(int pixel){
 		}
 }
 
-void dimBrightenPic(int choice, int size, int *xrow, int *ycol, int image[][size]){
+void cropImage(int size, int image[][size], int* xrow, int* ycol){
 	int rowInd, colInd;
 	int edit[size][size];
-	displayImage(IMAGESIZE, image, xrow, ycol);
+	int row1, col1, row2, col2;
+	
+	printf("      1");
+	for(colInd = 1; colInd <= *ycol; colInd++){
+		if(colInd != *ycol){
+			printf(" ");
+		}
+		else{
+			printf("%d", colInd);
+		}
+	}
+	for(rowInd = 0; rowInd < *xrow; rowInd++){
+		printf("\n");
+		printf("%4.1d  ", rowInd + 1);
+		for(colInd = 0; colInd < *ycol; colInd++){
+			printf("%c", convertPixel(image[rowInd][colInd]));
+		}
+	}
+	
+	printf("\nEnter the corners of the edited image\n");
+	printf("Upper left corner [row]: ");
+	scanf("%d", &row1);
+	printf("Upper left corner [column]: ");
+	scanf("%d", &col1);
+	printf("\nLower right corner [row]: ");
+	scanf("%d", &row2);
+	printf("Lower right corner [column]: ");
+	scanf("%d", &col2);
+	
+	int cropRows = *xrow - row1 - (*xrow - row2) + 1;
+	int cropCols = *ycol - col1 - (*ycol - col2) + 1;
+	
+	for(rowInd = 0; rowInd < cropRows; rowInd++){
+		for(colInd = 0; colInd < cropCols; colInd++){
+			edit[rowInd][colInd] = image[rowInd + row1 - 1][colInd + col1 - 1];
+		}
+	}
+	displayImage(size, edit, &cropRows, &cropCols);
+	saveImage(size, &cropRows, &cropCols, edit);
+	
+}
+
+void dimBrightenPic(int choice, int size, int* xrow, int* ycol, int image[][size]){
+	int rowInd, colInd;
+	int edit[size][size];
 	if(choice == 2){
 		for(rowInd = 0; rowInd < *xrow; rowInd++){
-			colInd = 0;
 			for(colInd = 0; colInd < *ycol; colInd++){
 				if(image[rowInd][colInd] != 0){
-					edit[rowInd][colInd] = image[rowInd][colInd] -1 ;
+					edit[rowInd][colInd] = image[rowInd][colInd] - 1;
+				}
+				else if(image[rowInd][colInd] == 0){
+					edit[rowInd][colInd] = image[rowInd][colInd];
 				}
 			}
-			
-			printf("%d ", edit[rowInd][colInd]);
-			printf("\n");
 		}
 	}
 	else if(choice == 3){
@@ -211,15 +235,50 @@ void dimBrightenPic(int choice, int size, int *xrow, int *ycol, int image[][size
 				if(image[rowInd][colInd] != 4){
 					edit[rowInd][colInd] = image[rowInd][colInd] + 1;
 				}
+				else if(image[rowInd][colInd] == 4){
+					edit[rowInd][colInd] = image[rowInd][colInd];
+				}
 			}
-			colInd = 0;
 		}
 	}
-	displayImage(IMAGESIZE, edit, xrow, ycol);
-	saveImage(IMAGESIZE, xrow, ycol, edit);
+	displayImage(size, edit, xrow, ycol);
+	saveImage(size, xrow, ycol, edit);
 }
 
-int saveImage(int size, int *xrow, int *ycol, int image[][size]){
+void rotateImage(int size, int image[][size], int* xrow, int* ycol){
+	int rowInd, colInd;
+	int choice;
+	int edit[size][size];
+	int rotateRows = *ycol;
+	int rotateCols = *xrow;
+	
+	printf("\n1: Rotate right\n2: Rotate left\n\n");
+	printf("Choose from one of the options above: ");
+	scanf("%d", &choice);
+	
+	if(choice == 1){
+		for(rowInd = 0; rowInd <= rotateRows; rowInd++){
+			for(colInd = 0; colInd <= rotateCols; colInd++){
+				edit[rowInd][colInd - 1] = image[rotateCols - colInd][rowInd];
+			}
+		}
+		displayImage(size, edit, &rotateRows, &rotateCols);
+		printf("Image rotated 90 degrees to the right.\n\n");
+	}
+	else if(choice == 2){
+		for(rowInd = 0; rowInd <= rotateRows; rowInd++){
+			for(colInd = 0; colInd <= rotateCols; colInd++){
+				edit[rowInd -1][colInd] = image[colInd][rotateRows - rowInd];
+			}
+		}
+		displayImage(size, edit, &rotateRows, &rotateCols);
+		printf("Image rotated 90 degrees to the left.\n\n");
+	}
+	saveImage(size, &rotateRows, &rotateCols, edit);
+
+}
+
+int saveImage(int size, int* xrow, int* ycol, int image[][size]){
 	int rowInd, colInd;
 	char choice;
 	char Name[50];
@@ -228,6 +287,7 @@ int saveImage(int size, int *xrow, int *ycol, int image[][size]){
 	printf("Would you like to save your edited image to a file? [Y]es or [N]o: ");
 	scanf(" %c", &choice);
 	if(choice == 'N' || choice == 'n'){
+		printf("\n\n");
 		return 0;
 	}
 	else if(choice == 'Y' || choice == 'y'){
@@ -244,7 +304,7 @@ int saveImage(int size, int *xrow, int *ycol, int image[][size]){
 			}
 			fprintf(ptr, "\n");
 		}
-		printf("\nImage Saved Successfully\n\n");
+		printf("\n---Image Saved Successfully---\nExit program to use edited image or edit original image again.\n\n");
 	}
 	else{
 		printf("Invalid choice\n");
