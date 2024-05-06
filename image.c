@@ -12,8 +12,8 @@ int loadImage(int size, int image[][size], int* xrow, int* ycol); //done
 char convertPixel(int pixel); //done
 void displayImage(int size, int image[][size], int* xrow, int* ycol); //done
 void cropImage();
-void dimBrightenPic(int choice, int xrow, int ycol, int image[][ycol]);
-int saveImage(int xrow, int ycol, int image[][ycol]);
+void dimBrightenPic(int choice, int xrow, int ycol, int image[][ycol]); //started
+int saveImage(int size, int *xrow, int *ycol, int image[][size]); //started
 
 
 int main(){
@@ -38,7 +38,8 @@ int main(){
 			if(isloaded == 1){
 			// display image call goes here
 			displayImage(IMAGESIZE, userImage, &xrow, &ycol);
-			}else{
+			}
+			else{
 				printf("Sorry, no image to display\n\n");
 			}
 		break;
@@ -64,7 +65,8 @@ int main(){
 					printf("Invalid option, please try again\n\n");
 				} 
 			
-			}else{
+			}
+			else{
 				printf("Sorry, no image to edit\n\n");
 			}
 		break;
@@ -110,7 +112,7 @@ int loadImage(int size, int image[][size], int* xrow, int* ycol){
 	}
 	
  	char temp[size][size];
- 	char getColSize;
+ 	
 	
 	for(rowInd = 0; rowInd < size && fscanf(ptr, "%c", &temp[rowInd][colInd]) == 1; rowInd++){
 		colInd = 1;
@@ -123,13 +125,15 @@ int loadImage(int size, int image[][size], int* xrow, int* ycol){
 		colInd++;
 	}
 
+	*xrow = rowInd;
+	*ycol = colInd;
 // test print of char
-	for(int i = 0; i <= rowInd; i++){
+	/* for(int i = 0; i <= rowInd; i++){
 		for(int j = 0; j <= colInd; j++){
 			printf("%c", temp[i][j]);
 		}
-	} 
-	
+	} */
+// converting char to int	
 	for (int i = 0; i < rowInd; i++) {
 	        for (int j = 0; j < colInd; j++) {
 	            image[i][j] = temp[i][j] - '0';
@@ -137,12 +141,12 @@ int loadImage(int size, int image[][size], int* xrow, int* ycol){
 	}
 	    
 // test print of int array
-	for(int i = 0; i < rowInd; i++){
+	/* for(int i = 0; i < rowInd; i++){
 		printf("\n");
 		for(int j = 0; j < colInd; j++){
 			printf("%d", image[i][j]);
 		}
-	}
+	} */
  	
 	
 	printf("\n\nImage successfully loaded\n\n");
@@ -190,21 +194,28 @@ void dimBrightenPic(int choice, int xrow, int ycol, int image[][ycol]){
 	if(choice == 2){
 		for(rowInd = 0; rowInd < xrow; rowInd++){
 			for(colInd = 0; colInd < ycol; colInd++){
-				edit[rowInd][colInd] = image[rowInd][colInd] + 1;
+				if(image[rowInd][colInd] != 0){
+					edit[rowInd][colInd] = image[rowInd][colInd] - 1;
+				}
 			}
+			colInd = 0;
 		}
 	}
-	if(choice == 3){
+	else if(choice == 3){
 		for(rowInd = 0; rowInd < xrow; rowInd++){
 			for(colInd = 0; colInd < ycol; colInd++){
-				edit[rowInd][colInd] = image[rowInd][colInd] - 1;
+				if(image[rowInd][colInd] != 4){
+					edit[rowInd][colInd] = image[rowInd][colInd] + 1;
+				}
 			}
+			colInd = 0;
 		}
 	}
-	displayImage(ycol, edit, &xrow, &ycol);
+	displayImage(IMAGESIZE, edit, &xrow, &ycol);
+	saveImage(IMAGESIZE, &xrow, &ycol, edit);
 }
 
-int saveImage(int xrow, int ycol, int image[][ycol]){
+int saveImage(int size, int *xrow, int *ycol, int image[][size]){
 	int rowInd, colInd;
 	char choice;
 	char Name[50];
@@ -212,13 +223,10 @@ int saveImage(int xrow, int ycol, int image[][ycol]){
 	
 	printf("Would you like to save your edited image to a file? [Y]es or [N]o: ");
 	scanf(" %c", &choice);
-	switch(choice){
-		case 'N':
-		case 'n':
+	if(choice == 'N' || choice == 'n'){
 		return 0;
-		break;
-		case 'Y':
-		case 'y':
+	}
+	else if(choice == 'Y' || choice == 'y'){
 		printf("Enter the file name [.txt format, no spaces]:\n");
 		scanf("%s", Name);
 		ptr = fopen(Name,"w");
@@ -226,14 +234,16 @@ int saveImage(int xrow, int ycol, int image[][ycol]){
 			printf("Cant open file");
 			return 0;
 		}
-		for(rowInd = 0; rowInd < xrow; rowInd++){
-			for(colInd = 0; colInd < ycol; colInd++){
+		for(rowInd = 0; rowInd < *xrow; rowInd++){
+			for(colInd = 0; colInd < *ycol; colInd++){
 				fprintf(ptr, "%d", image[rowInd][colInd]);
 			}
 			fprintf(ptr, "\n");
 		}
-		default:
+		printf("\nImage Saved Successfully\n\n");
+	}
+	else{
 		printf("Invalid choice\n");
-		}
+	}
 	return 0;	
 }
