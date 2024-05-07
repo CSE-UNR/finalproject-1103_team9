@@ -13,7 +13,7 @@ char convertPixel(int pixel); //done
 void displayImage(int size, int image[][size], int* xrow, int* ycol); //done
 void cropImage(int size, int image[][size], int* xrow, int* ycol); //done
 void dimBrightenPic(int choice, int size, int* xrow, int* ycol, int image[][size]); //done
-void rotateImage(int size, int image[][size], int* xrow, int* ycol);
+void rotateImage(int size, int image[][size], int* xrow, int* ycol); //done
 int saveImage(int size, int* xrow, int* ycol, int image[][size]); //done
 
 
@@ -38,7 +38,7 @@ int main(){
 			displayImage(IMAGESIZE, userImage, &xrow, &ycol);
 			}
 			else{
-				printf("Sorry, no image to display\n\n");
+				printf("Sorry, no image to display.\n\n");
 			}
 		break;
 		case 3:
@@ -61,16 +61,16 @@ int main(){
 					printf("\n\n");
 				break;
 				default:
-					printf("Invalid option, please try again\n\n");
+					printf("Invalid option, please try again.\n\n");
 				} 
 			
 			}
 			else{
-				printf("Sorry, no image to edit\n\n");
+				printf("Sorry, no image to edit.\n\n");
 			}
 		break;
 		default:
-			printf("Invalid option, please try again\n\n");
+			printf("Invalid option, please try again.\n\n");
 		}
 	}while(userin != 0);
 	return 0;
@@ -106,7 +106,7 @@ int loadImage(int size, int image[][size], int* xrow, int* ycol){
 	
 	ptr = fopen(Name,"r");
 	if(ptr == NULL){
-		printf("Cant open file");
+		printf("Can't open the file.");
 		return 0;
 	}
 	
@@ -191,7 +191,7 @@ void cropImage(int size, int image[][size], int* xrow, int* ycol){
 		}
 	}
 	
-	printf("\nEnter the corners of the edited image\n");
+	printf("\nEnter the corners of the edited image.\n");
 	printf("Upper left corner [row]: ");
 	scanf("%d", &row1);
 	printf("Upper left corner [column]: ");
@@ -263,7 +263,7 @@ void rotateImage(int size, int image[][size], int* xrow, int* ycol){
 			}
 		}
 		displayImage(size, edit, &rotateRows, &rotateCols);
-		printf("Image rotated 90 degrees to the right.\n\n");
+		printf("Image rotated 90 degrees clockwise.\n\n");
 	}
 	else if(choice == 2){
 		for(rowInd = 0; rowInd <= rotateRows; rowInd++){
@@ -272,7 +272,7 @@ void rotateImage(int size, int image[][size], int* xrow, int* ycol){
 			}
 		}
 		displayImage(size, edit, &rotateRows, &rotateCols);
-		printf("Image rotated 90 degrees to the left.\n\n");
+		printf("Image rotated 90 degrees clockwise.\n\n");
 	}
 	saveImage(size, &rotateRows, &rotateCols, edit);
 
@@ -295,7 +295,7 @@ int saveImage(int size, int* xrow, int* ycol, int image[][size]){
 		scanf("%s", Name);
 		ptr = fopen(Name,"w");
 		if(ptr == NULL){
-			printf("Cant open file");
+			printf("Can't open the file.");
 			return 0;
 		}
 		for(rowInd = 0; rowInd < *xrow; rowInd++){
