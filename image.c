@@ -100,7 +100,7 @@ int loadImage(int size, int image[][size], int* xrow, int* ycol){
 	int rowInd = 0, colInd = 0;
 	FILE* ptr;
 	
-	printf("Enter the file name [.txt format, no spaces]:\n");
+	printf("Enter the file name [.txt format, no spaces]: ");
 	scanf("%s", Name);
 
 	
@@ -272,7 +272,7 @@ void rotateImage(int size, int image[][size], int* xrow, int* ycol){
 			}
 		}
 		displayImage(size, edit, &rotateRows, &rotateCols);
-		printf("Image rotated 90 degrees clockwise.\n\n");
+		printf("Image rotated 90 degrees counterclockwise.\n\n");
 	}
 	saveImage(size, &rotateRows, &rotateCols, edit);
 
@@ -291,7 +291,7 @@ int saveImage(int size, int* xrow, int* ycol, int image[][size]){
 		return 0;
 	}
 	else if(choice == 'Y' || choice == 'y'){
-		printf("Enter the file name [.txt format, no spaces]:\n");
+		printf("Enter the file name [.txt format, no spaces]: ");
 		scanf("%s", Name);
 		ptr = fopen(Name,"w");
 		if(ptr == NULL){
