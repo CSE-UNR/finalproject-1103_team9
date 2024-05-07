@@ -281,7 +281,7 @@ void rotateImage(int size, int image[][size], int* xrow, int* ycol){
 int saveImage(int size, int* xrow, int* ycol, int image[][size]){
 	int rowInd, colInd;
 	char choice;
-	char Name[50];
+	char Name[size];
 	FILE* ptr;
 	
 	printf("Would you like to save your edited image to a file? [Y]es or [N]o: ");
