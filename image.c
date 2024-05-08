@@ -1,4 +1,4 @@
-// Omar Rojas And Eden
+// Omar Rojas And Eden Blake
 // CS 135
 // Team Project 11
 
